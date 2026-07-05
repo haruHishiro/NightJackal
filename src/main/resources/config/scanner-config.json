@@ -1,0 +1,36 @@
+{
+  "web": {
+    "pathTraversal": true,
+    "xxe": true,
+    "sqlInjection": true,
+    "commandInjection": false,
+    "xss": false,
+    "jwtKidInjection": true,
+    "ssrf": true,
+    "httpMethodFuzzing": true
+  },
+  "infra": {
+    "portScanning": true,
+    "subdomainEnumeration": true,
+    "fingerprinting": true
+  },
+  "files": {
+    "sensitiveFileBruteforce": true,
+    "credentialStuffing": false
+  },
+  "discovery": {
+    "enable": true,
+    "maxForms": 20,
+    "maxLinks": 100,
+    "parseJson": true
+  },
+  "chain": {
+    "enable": false,
+    "maxDepth": 5
+  },
+  "timeout": 10000,
+  "threads": 5,
+  "timeBasedThreshold": 5000,
+  "portScanTimeout": 1000,
+  "dnsTimeout": 3000
+}
