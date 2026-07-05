@@ -166,8 +166,8 @@ ReportGenerator → Console / JSON
 
 ```
 
-vuln-scanner-java/
-├── src/main/java/com/vulnscanner/
+NightJackal/
+├── src/main/java/com/nightjackal/
 │   ├── Launcher.java
 │   │
 │   ├── config/
