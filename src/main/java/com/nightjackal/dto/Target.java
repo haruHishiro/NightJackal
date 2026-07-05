@@ -22,6 +22,10 @@ public class Target {
         this.contentType = contentType;
     }
 
+    public Target() {
+
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

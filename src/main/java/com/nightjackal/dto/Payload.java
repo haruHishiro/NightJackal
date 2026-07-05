@@ -22,6 +22,10 @@ public class Payload {
         this.tags = tags;
     }
 
+    public Payload() {
+
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
