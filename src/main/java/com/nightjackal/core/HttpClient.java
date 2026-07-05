@@ -15,6 +15,7 @@ import java.util.concurrent.TimeUnit;
  * HTTP-клиент на основе OkHttp.
  * Отправляет запросы, обрабатывает таймауты и редиректы,
  * возвращает унифицированный ResponseData.
+ * Полностью эмулирует браузерный запрос для обхода блокировок.
  */
 public class HttpClient {
 
@@ -47,7 +48,7 @@ public class HttpClient {
                 .writeTimeout(timeout, TimeUnit.MILLISECONDS)
                 .followRedirects(followRedirects)
                 .followSslRedirects(followRedirects)
-                .addInterceptor(new UserAgentInterceptor())
+                .addInterceptor(new BrowserEmulationInterceptor())
                 .build();
 
         logger.debug("HttpClient initialized with timeout={}ms, followRedirects={}", timeout, followRedirects);
@@ -205,7 +206,7 @@ public class HttpClient {
                     statusCode,
                     body.length(),
                     elapsedSec,
-                    body.length() > 10000 ? body.substring(0, 10000) : body, // ограничиваем для памяти
+                    body.length() > 10000 ? body.substring(0, 10000) : body,
                     headers,
                     request.url().toString(),
                     null,
@@ -215,7 +216,8 @@ public class HttpClient {
 
         } catch (IOException e) {
             long elapsedMs = TimeUnit.NANOSECONDS.toMillis(System.nanoTime() - startTime);
-            logger.error("Request to {} failed: {}", request.url(), e.getMessage());
+            String errorMessage = e.getMessage() != null ? e.getMessage() : e.getClass().getSimpleName();
+            logger.error("Request to {} failed: {}", request.url(), errorMessage, e);
 
             return new ResponseData(
                     0,
@@ -224,7 +226,7 @@ public class HttpClient {
                     "",
                     new HashMap<>(),
                     request.url().toString(),
-                    e.getMessage(),
+                    errorMessage,
                     e instanceof java.net.SocketTimeoutException,
                     List.of()
             );
@@ -249,15 +251,30 @@ public class HttpClient {
     }
 
     /**
-     * Интерсептор для подмены User-Agent.
+     * Интерсептор для полной эмуляции браузерного запроса.
      */
-    private static class UserAgentInterceptor implements Interceptor {
+    private static class BrowserEmulationInterceptor implements Interceptor {
         @Override
         public Response intercept(Chain chain) throws IOException {
             Request original = chain.request();
+
             Request modified = original.newBuilder()
-                    .header("User-Agent", "NightJackal/1.0 (Security Scanner)")
+                    .header("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/149.0.0.0 Safari/537.36")
+                    .header("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7")
+                    .header("Accept-Encoding", "gzip, deflate, br, zstd")
+                    .header("Accept-Language", "ru-RU,ru;q=0.9,en-US;q=0.8,en;q=0.7")
+                    .header("Sec-Ch-Ua", "\"Google Chrome\";v=\"149\", \"Chromium\";v=\"149\", \"Not)A;Brand\";v=\"24\"")
+                    .header("Sec-Ch-Ua-Mobile", "?0")
+                    .header("Sec-Ch-Ua-Platform", "\"Windows\"")
+                    .header("Sec-Fetch-Dest", "document")
+                    .header("Sec-Fetch-Mode", "navigate")
+                    .header("Sec-Fetch-Site", "none")
+                    .header("Sec-Fetch-User", "?1")
+                    .header("Upgrade-Insecure-Requests", "1")
+                    .header("Cache-Control", "max-age=0")
+                    .header("Priority", "u=0, i")
                     .build();
+
             return chain.proceed(modified);
         }
     }
