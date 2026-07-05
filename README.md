@@ -277,6 +277,11 @@ NightJackal/
 └── README.md
 
 ```
+---
+
+## DTO
+
+Подробное описание всех DTO находится [тут](/src/main/java/com/nightjackal/dto/DTO.md)
 
 ---
 
